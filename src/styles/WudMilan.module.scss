@@ -1,7 +1,148 @@
 @import "./main";
 
+$primary-blue: #0132de;
+$primary-green: #ddff6d;
+
+$header-width: 100px;
+
 .wrapper {
-  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(0, 212, 255, 1) 100%);
+  background: $primary-blue;
   height: 100vh;
-  width: 500vw;
+  width: fit-content;
+  color: white;
+}
+
+.background {
+  min-width: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  font-size: 500px;
+  font-weight: 900;
+  overflow-x: scroll;
+  //scroll-behavior: smooth;
+
+  p {
+    margin: 0 300px;
+    white-space: nowrap;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.content {
+  min-width: 0;
+  height: 100%;
+}
+
+.wud_header {
+  position: fixed;
+  border-right: 2px solid white;
+  height: 100%;
+  width: $header-width;
+  writing-mode: vertical-rl;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  padding: 35px 0;
+  background: $primary-blue;
+
+  .header_left {
+    display: flex;
+    align-items: center;
+  }
+
+  .wud_logo {
+    margin-top: 40px;
+    font-weight: bold;
+    font-size: 24px;
+
+    strong {
+      color: $primary-green;
+    }
+  }
+
+  .wud_date {
+    transform: translateY(-35px);
+    font-size: 20px;
+  }
+}
+
+.scroll_frame {
+  height: 100%;
+  width: 100vw;
+  overflow-x: scroll;
+  //scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+main {
+  height: 100%;
+  display: flex;
+  width: fit-content;
+}
+
+section {
+  height: 100%;
+  z-index: 1;
+}
+
+.hero {
+  width: 100vw;
+}
+
+.about {
+  width: 1490px;
+
+  .about_inner {
+    background: white;
+    width: 934px;
+    height: 100%;
+    border-left: 2px solid $primary-blue;
+    border-right: 2px solid $primary-blue;
+  }
+}
+
+.talks {
+  width: 3685px;
+
+  .talks_inner {
+    height: 100%;
+    background: $primary-blue;
+    width: 3130px;
+    border-left: 2px solid white;
+    border-right: 2px solid white;
+  }
+}
+
+.organizers {
+  width: 1564px;
+
+  .organizers_inner {
+    height: 100%;
+    background: white;
+    width: 934px;
+    border-left: 2px solid $primary-blue;
+    border-right: 2px solid $primary-blue;
+  }
+}
+
+.sponsors {
+  width: 934px;
+
+  .sponsors_inner {
+    height: 100%;
+    background: white;
+    width: 934px;
+    border-left: 2px solid $primary-blue;
+  }
 }
