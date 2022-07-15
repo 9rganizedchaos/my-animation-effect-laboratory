@@ -3,7 +3,7 @@ import { Menu } from 'react-feather';
 import { useState, useEffect, useRef } from 'react';
 import * as styles from '../styles/WudMilan.module.scss';
 
-const ACC = 0.02;
+const ACC = 0.1;
 
 function WudMilanPage() {
 	let bgPivot = 0;
@@ -16,11 +16,12 @@ function WudMilanPage() {
 
 	const loop = () => {
 		if (background.current && mainContent.current) {
-			console.log(bgPivot, mcPivot, background.current.scrollLeft, mainContent.current.scrollLeft);
+			console.log(bgPivot, background.current.scrollLeft);
 			background.current.scrollLeft += bgPivot * ACC;
 			mainContent.current.scrollLeft += mcPivot * ACC;
 			bgPivot *= 1 - ACC;
 			mcPivot *= 1 - ACC;
+
 			if (Math.abs(bgPivot) < 1 && Math.abs(mcPivot) < 1) {
 				cancelAnimationFrame(rafId);
 				mcPivot = 0;
@@ -35,26 +36,22 @@ function WudMilanPage() {
 	const handleWindowScroll = async (e: WheelEvent) => {
 		const backgroundContentWidth = backgroundContent.current?.offsetWidth || 1;
 		const mainContentContentWidth = mainContentContent.current?.offsetWidth || 1;
-		if (bgPivot === 0 || mcPivot === 0) {
-			bgPivot = e.deltaY * (backgroundContentWidth / mainContentContentWidth);
-			mcPivot = e.deltaY;
-			const newRafId = requestAnimationFrame(loop);
-			setRafId(newRafId);
-		} else {
+		const { deltaY } = e;
+		const decelerateDeltaY = deltaY * (backgroundContentWidth / mainContentContentWidth);
+
+		if (bgPivot !== 0 && mcPivot !== 0) {
 			await cancelAnimationFrame(rafId);
-			bgPivot = e.deltaY * (backgroundContentWidth / mainContentContentWidth);
-			mcPivot = e.deltaY;
-			const newRafId = requestAnimationFrame(loop);
-			setRafId(newRafId);
 		}
+
+		bgPivot = decelerateDeltaY;
+		mcPivot = deltaY;
+		const newRafId = requestAnimationFrame(loop);
+		setRafId(newRafId);
 	};
 
 	useEffect(() => {
 		window.addEventListener('wheel', (e) => handleWindowScroll(e));
-		// return window.removeEventListener('wheel', handleWindowScroll);
-		//
-		// window.addEventListener('wheel', (e) => handleWindowScrolled(e));
-		// return window.removeEventListener('wheel', (e) => handleWindowScrolled(e));
+		return window.removeEventListener('wheel', handleWindowScroll);
 	}, []);
 
 	return (
