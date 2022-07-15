@@ -22,7 +22,6 @@ $header-width: 100px;
   font-size: 500px;
   font-weight: 900;
   overflow-x: scroll;
-  //scroll-behavior: smooth;
 
   p {
     margin: 0 300px;
@@ -78,7 +77,6 @@ $header-width: 100px;
   height: 100%;
   width: 100vw;
   overflow-x: scroll;
-  //scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     display: none;
