@@ -3,6 +3,9 @@ import { Menu } from 'react-feather';
 import { useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
 import * as styles from '../styles/WudMilan.module.scss';
+import AboutSection from '../components/wud-milan/AboutSection';
+import TalksSection from '../components/wud-milan/TalksSection';
+import OrganizersSection from '../components/wud-milan/OrganizersSection';
 
 const ACC = 0.5;
 const DEC = 0.08;
@@ -43,8 +46,8 @@ function WudMilanPage() {
 			await cancelAnimationFrame(rafId);
 		}
 
-		bgPivot = decelerateDeltaY / 2;
-		mcPivot = deltaY / 2;
+		bgPivot = decelerateDeltaY / 3;
+		mcPivot = deltaY / 3;
 		rafId = requestAnimationFrame(loop);
 	}, 100);
 
@@ -70,15 +73,21 @@ function WudMilanPage() {
 				</header>
 				<div className={styles.scroll_frame} ref={main}>
 					<main ref={mainContent}>
-						<section className={styles.hero}></section>
+						<section className={styles.hero} />
 						<section className={styles.about}>
-							<div className={styles.about_inner}></div>
+							<div className={styles.about_inner}>
+								<AboutSection />
+							</div>
 						</section>
 						<section className={styles.talks}>
-							<div className={styles.talks_inner}></div>
+							<div className={styles.talks_inner}>
+								<TalksSection />
+							</div>
 						</section>
 						<section className={styles.organizers}>
-							<div className={styles.organizers_inner}></div>
+							<div className={styles.organizers_inner}>
+								<OrganizersSection />
+							</div>
 						</section>
 						<section className={styles.sponsors}>
 							<div className={styles.sponsors_inner}></div>
