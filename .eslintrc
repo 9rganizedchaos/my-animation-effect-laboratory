@@ -11,6 +11,11 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "import/no-unresolved": "off",
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
     "react/jsx-filename-extension": [
       2,
       {
