@@ -6,6 +6,7 @@ $primary-green: #ddff6d;
 $header-width: 100px;
 
 .wrapper {
+  position: relative;
   background: $primary-blue;
   height: 100vh;
   width: fit-content;
@@ -23,8 +24,30 @@ $header-width: 100px;
   font-weight: 900;
   overflow-x: scroll;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.bg_canvas_wrapper {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+
+  canvas {
+    z-index: 1;
+  }
+}
+
+.bg_text_wrapper {
+  position: absolute;
+  width: 100%;
+  overflow-x: scroll;
+  z-index: 2;
+
   p {
-    margin: 0 300px;
+    padding: 0 300px;
     white-space: nowrap;
   }
 
@@ -32,6 +55,7 @@ $header-width: 100px;
     display: none;
   }
 }
+
 
 .content {
   min-width: 0;
@@ -48,7 +72,7 @@ $header-width: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  z-index: 2;
+  z-index: 4;
   padding: 35px 0;
   background: $primary-blue;
 
@@ -91,7 +115,7 @@ main {
 
 section {
   height: 100%;
-  z-index: 1;
+  z-index: 3;
 }
 
 .hero {

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Menu } from 'react-feather';
 import { useEffect, useRef } from 'react';
 import { debounce } from 'lodash';
+import * as PIXI from 'pixi.js';
 import * as styles from '../styles/WudMilan.module.scss';
 import AboutSection from '../components/wud-milan/AboutSection';
 import TalksSection from '../components/wud-milan/TalksSection';
@@ -18,6 +19,7 @@ function WudMilanPage() {
 	const main = useRef<HTMLDivElement>(null);
 	const backgroundContent = useRef<HTMLParagraphElement>(null);
 	const mainContent = useRef<HTMLElement>(null);
+	const canvasRef = useRef<HTMLDivElement>(null);
 
 	const loop = () => {
 		if (background.current && main.current) {
@@ -37,18 +39,20 @@ function WudMilanPage() {
 	};
 
 	const handleWindowScroll = debounce(async (e: WheelEvent) => {
-		const backgroundContentWidth = backgroundContent.current?.offsetWidth || 1;
-		const mainContentWidth = mainContent.current?.offsetWidth || 1;
-		const { deltaY } = e;
-		const decelerateDeltaY = deltaY * (backgroundContentWidth / mainContentWidth);
+		if (backgroundContent.current && mainContent.current) {
+			const backgroundContentWidth = backgroundContent.current.scrollWidth;
+			const mainContentWidth = mainContent.current.scrollWidth;
+			const { deltaY } = e;
+			const decelerateDeltaY = deltaY * (backgroundContentWidth / mainContentWidth);
 
-		if (bgPivot !== 0 && mcPivot !== 0) {
-			await cancelAnimationFrame(rafId);
+			if (bgPivot !== 0 && mcPivot !== 0) {
+				await cancelAnimationFrame(rafId);
+			}
+
+			bgPivot = decelerateDeltaY / 3;
+			mcPivot = deltaY / 3;
+			rafId = requestAnimationFrame(loop);
 		}
-
-		bgPivot = decelerateDeltaY / 3;
-		mcPivot = deltaY / 3;
-		rafId = requestAnimationFrame(loop);
 	}, 100);
 
 	useEffect(() => {
@@ -56,10 +60,41 @@ function WudMilanPage() {
 		return window.removeEventListener('wheel', (e) => handleWindowScroll(e));
 	}, []);
 
+	useEffect(() => {
+		if (canvasRef.current) {
+			const app = new PIXI.Application({
+				width: canvasRef.current.offsetWidth,
+				height: canvasRef.current.offsetHeight,
+				backgroundColor: 0x0132de,
+			});
+			canvasRef.current?.appendChild(app.view);
+
+			const ghost = PIXI.Sprite.from('https://i.imgur.com/Y5zKtAd.png');
+
+			ghost.anchor.set(0.5);
+
+			ghost.x = app.screen.width / 2;
+			ghost.y = app.screen.height / 2;
+
+			app.stage.addChild(ghost);
+
+			app.ticker.add((delta) => {
+				ghost.rotation += 0.03 * delta;
+			});
+		}
+
+		return () => {
+			canvasRef.current?.removeChild(app.view);
+		};
+	});
+
 	return (
 		<div className={styles.wrapper}>
-			<div className={styles.background} ref={background}>
-				<p ref={backgroundContent}>W U D M I L A N</p>
+			<div className={styles.background} ref={canvasRef}>
+				<div className={styles.bg_text_wrapper} ref={background}>
+					<p ref={backgroundContent}>W U D M I L A N</p>
+				</div>
+				<div className={styles.bg_canvas_wrapper} ref={canvasRef} />
 			</div>
 			<div className={styles.content}>
 				<header className={styles.wud_header}>
