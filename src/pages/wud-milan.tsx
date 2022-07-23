@@ -69,18 +69,13 @@ function WudMilanPage() {
 			});
 			canvasRef.current?.appendChild(app.view);
 
-			const ghost = PIXI.Sprite.from('https://i.imgur.com/Y5zKtAd.png');
+			const graphics = new PIXI.Graphics();
 
-			ghost.anchor.set(0.5);
+			graphics.beginFill(0xddff6d);
 
-			ghost.x = app.screen.width / 2;
-			ghost.y = app.screen.height / 2;
+			graphics.drawRect(200, 200, 50, 50);
 
-			app.stage.addChild(ghost);
-
-			app.ticker.add((delta) => {
-				ghost.rotation += 0.03 * delta;
-			});
+			app.stage.addChild(graphics);
 		}
 
 		return () => {
