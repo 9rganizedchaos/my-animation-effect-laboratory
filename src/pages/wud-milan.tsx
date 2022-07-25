@@ -8,13 +8,17 @@ import * as styles from '../styles/WudMilan.module.scss';
 import AboutSection from '../components/wud-milan/AboutSection';
 import TalksSection from '../components/wud-milan/TalksSection';
 import OrganizersSection from '../components/wud-milan/OrganizersSection';
-import { getRandomArbitrary } from '../utils/util';
 
-const ACC = 0.5;
-const DEC = 0.08;
-let bgPivot = 0;
-let mcPivot = 0;
-let rafId: number;
+type ScrollState = {
+	moving: boolean;
+	scrollDir: string;
+	mainScrollPos: number;
+	bgScrollPos: number;
+	scrollTop: number;
+	mainSpeed: number;
+	bgSpeed: number;
+	smooth: number;
+};
 
 function WudMilanPage() {
 	const background = useRef<HTMLDivElement>(null);
@@ -23,52 +27,91 @@ function WudMilanPage() {
 	const mainContent = useRef<HTMLElement>(null);
 	const canvasRef = useRef<HTMLDivElement>(null);
 
+	let mainTarget = main.current;
+	let bgTarget = background.current;
+
+	let scrollState: ScrollState = {
+		moving: false,
+		scrollDir: '',
+		mainScrollPos: 0,
+		bgScrollPos: 0,
+		scrollTop: 0,
+		mainSpeed: 90,
+		bgSpeed: 30,
+		smooth: 12,
+	};
+
 	let mouseX = 0;
 	let mouseY = 0;
 
-	const loop = () => {
-		if (background.current && main.current) {
-			background.current.scrollLeft += bgPivot * ACC;
-			main.current.scrollLeft += mcPivot * ACC;
-			bgPivot *= 1 - DEC;
-			mcPivot *= 1 - DEC;
+	const updateScrollPosition = () => {
+		scrollState.moving = true;
 
-			if (Math.abs(bgPivot) < 1 && Math.abs(mcPivot) < 1) {
-				cancelAnimationFrame(rafId);
-				mcPivot = 0;
-				bgPivot = 0;
-			} else {
-				rafId = requestAnimationFrame(loop);
-			}
+		const mainDelta = (scrollState.mainScrollPos - mainTarget.scrollLeft) / scrollState.smooth;
+		const bgDelta = (scrollState.bgScrollPos - bgTarget.scrollLeft) / scrollState.smooth;
+
+		mainTarget.scrollLeft += mainDelta;
+		bgTarget.scrollLeft += bgDelta;
+
+		if (Math.abs(mainDelta) > 0 || Math.abs(bgDelta) > 0) {
+			window.requestAnimationFrame(updateScrollPosition);
+		} else {
+			scrollState.moving = false;
 		}
 	};
 
-	const handleWindowScroll = debounce(async (e: WheelEvent) => {
-		if (backgroundContent.current && mainContent.current) {
-			const backgroundContentWidth = backgroundContent.current.scrollWidth;
-			const mainContentWidth = mainContent.current.scrollWidth;
-			const { deltaY } = e;
-			const decelerateDeltaY = deltaY * (backgroundContentWidth / mainContentWidth);
+	const handleWindowScroll = (e: WheelEvent) => {
+		e.preventDefault();
 
-			if (bgPivot !== 0 && mcPivot !== 0) {
-				await cancelAnimationFrame(rafId);
-			}
-
-			bgPivot = decelerateDeltaY / 3;
-			mcPivot = deltaY / 3;
-			rafId = requestAnimationFrame(loop);
+		if (scrollState.mainScrollPos > scrollState.scrollTop || scrollState.bgScrollPos > scrollState.scrollTop) {
+			scrollState.scrollDir = 'down';
+		} else {
+			scrollState.scrollDir = 'up';
 		}
-	}, 100);
+
+		scrollState.scrollTop = scrollState.mainScrollPos || scrollState.bgScrollPos <= 0 ? 0 : scrollState.mainScrollPos;
+
+		let mainDelta = e.wheelDelta / 120;
+		let bgDelta = e.wheelDelta / 120;
+
+		scrollState.mainScrollPos += -mainDelta * scrollState.mainSpeed;
+		scrollState.bgScrollPos += -bgDelta * scrollState.bgSpeed;
+		scrollState.mainScrollPos = Math.max(
+			0,
+			Math.min(scrollState.mainScrollPos, mainTarget.scrollWidth - mainTarget.clientWidth)
+		);
+		scrollState.bgScrollPos = Math.max(
+			0,
+			Math.min(scrollState.bgScrollPos, bgTarget.scrollWidth - bgTarget.clientWidth)
+		);
+
+		if (!scrollState.moving) {
+			updateScrollPosition();
+		}
+	};
 
 	const handleMouseMove = debounce((e) => {
 		mouseX = Math.floor(e.pageX / 30);
 		mouseY = Math.floor(e.pageY / 30);
 	}, 10);
 
+	// useEffect(() => {
+	// 	window.addEventListener('wheel', (e) => handleWindowScroll(e));
+	// 	window.addEventListener('mousemove', (e) => handleMouseMove(e));
+	// 	return () => {
+	// 		window.removeEventListener('wheel', (e) => handleWindowScroll(e));
+	// 		window.removeEventListener('mousemove', (e) => handleMouseMove(e));
+	// 	};
+	// }, []);
+
 	useEffect(() => {
-		window.addEventListener('wheel', (e) => handleWindowScroll(e));
-		return window.removeEventListener('wheel', (e) => handleWindowScroll(e));
-	}, []);
+		if (main.current) {
+			mainTarget = main.current;
+			bgTarget = background.current;
+			scrollState.mainScrollPos = mainTarget.scrollLeft;
+			scrollState.bgScrollPos = bgTarget.scrollLeft;
+		}
+	}, [main.current]);
 
 	useEffect(() => {
 		if (canvasRef.current) {
@@ -183,9 +226,14 @@ function WudMilanPage() {
 	});
 
 	useEffect(() => {
+		window.addEventListener('wheel', handleWindowScroll, { passive: false });
 		window.addEventListener('mousemove', (e) => handleMouseMove(e));
-		return window.removeEventListener('mousemove', (e) => handleMouseMove(e));
-	});
+
+		return () => {
+			window.removeEventListener('wheel', handleWindowScroll);
+			window.removeEventListener('mousemove', (e) => handleMouseMove(e));
+		};
+	}, []);
 
 	return (
 		<div className={styles.wrapper}>
