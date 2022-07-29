@@ -8,6 +8,7 @@ import * as styles from '../styles/WudMilan.module.scss';
 import AboutSection from '../components/wud-milan/AboutSection';
 import TalksSection from '../components/wud-milan/TalksSection';
 import OrganizersSection from '../components/wud-milan/OrganizersSection';
+import SponsorsSection from '../components/wud-milan/SponsorsSection';
 
 type ScrollState = {
 	moving: boolean;
@@ -272,7 +273,9 @@ function WudMilanPage() {
 							</div>
 						</section>
 						<section className={styles.sponsors}>
-							<div className={styles.sponsors_inner}></div>
+							<div className={styles.sponsors_inner}>
+								<SponsorsSection />
+							</div>
 						</section>
 					</main>
 				</div>
