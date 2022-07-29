@@ -115,115 +115,115 @@ function WudMilanPage() {
 	}, [main.current]);
 
 	useEffect(() => {
-		if (canvasRef.current) {
-			const canvasWidth = canvasRef.current.offsetWidth;
-			const canvasHeight = canvasRef.current.offsetHeight;
-
-			const app = new PIXI.Application({
-				width: canvasWidth,
-				height: canvasHeight,
-				backgroundColor: 0x0132de,
-			});
-			canvasRef.current?.appendChild(app.view);
-
-			const container: Graphics[] = [];
-
-			setInterval(() => {
-				container.forEach((graphic) => {
-					app.stage.removeChild(graphic);
-				});
-
-				for (let i = 0; i < 200; i++) {
-					const whitePixel = new PIXI.Graphics();
-					const greenPixel1 = new PIXI.Graphics();
-					const greenPixel2 = new PIXI.Graphics();
-
-					whitePixel.beginFill(0xffffff);
-					greenPixel1.beginFill(0xddff6d);
-					greenPixel2.beginFill(0xddff6d);
-
-					const whitePixelTheta = Math.random() * 6 * Math.PI;
-					const greenPixelTheta1 = Math.random() * 8 * Math.PI;
-					const greenPixelTheta2 = Math.random() * 8 * Math.PI;
-					const whitePixelR = Math.random() * 6;
-					const greenPixelR1 = Math.random() * 8;
-					const greenPixelR2 = Math.random() * 8;
-
-					whitePixel.drawRect(
-						mouseX * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
-						mouseY * 30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
-						30,
-						30
-					);
-
-					whitePixel.drawRect(
-						8 * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
-						30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
-						30,
-						30
-					);
-
-					whitePixel.drawRect(
-						(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
-						(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
-						30,
-						30
-					);
-
-					greenPixel1.drawRect(
-						mouseX * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
-						mouseY * 30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
-						30,
-						30
-					);
-
-					greenPixel1.drawRect(
-						8 * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
-						30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
-						30,
-						30
-					);
-
-					greenPixel1.drawRect(
-						(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
-						(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
-						30,
-						30
-					);
-
-					greenPixel2.drawRect(
-						mouseX * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
-						mouseY * 30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
-						30,
-						30
-					);
-
-					greenPixel2.drawRect(
-						8 * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
-						30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
-						30,
-						30
-					);
-
-					greenPixel2.drawRect(
-						(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
-						(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
-						30,
-						30
-					);
-
-					app.stage.addChild(whitePixel);
-					app.stage.addChild(greenPixel1);
-					app.stage.addChild(greenPixel2);
-
-					container.push(whitePixel, greenPixel1, greenPixel2);
-				}
-			}, 500);
-		}
-
-		return () => {
-			canvasRef.current?.removeChild(app.view);
-		};
+		// if (canvasRef.current) {
+		// 	const canvasWidth = canvasRef.current.offsetWidth;
+		// 	const canvasHeight = canvasRef.current.offsetHeight;
+		//
+		// 	const app = new PIXI.Application({
+		// 		width: canvasWidth,
+		// 		height: canvasHeight,
+		// 		backgroundColor: 0x0132de,
+		// 	});
+		// 	canvasRef.current?.appendChild(app.view);
+		//
+		// 	const container: Graphics[] = [];
+		//
+		// 	setInterval(() => {
+		// 		container.forEach((graphic) => {
+		// 			app.stage.removeChild(graphic);
+		// 		});
+		//
+		// 		for (let i = 0; i < 200; i++) {
+		// 			const whitePixel = new PIXI.Graphics();
+		// 			const greenPixel1 = new PIXI.Graphics();
+		// 			const greenPixel2 = new PIXI.Graphics();
+		//
+		// 			whitePixel.beginFill(0xffffff);
+		// 			greenPixel1.beginFill(0xddff6d);
+		// 			greenPixel2.beginFill(0xddff6d);
+		//
+		// 			const whitePixelTheta = Math.random() * 6 * Math.PI;
+		// 			const greenPixelTheta1 = Math.random() * 8 * Math.PI;
+		// 			const greenPixelTheta2 = Math.random() * 8 * Math.PI;
+		// 			const whitePixelR = Math.random() * 6;
+		// 			const greenPixelR1 = Math.random() * 8;
+		// 			const greenPixelR2 = Math.random() * 8;
+		//
+		// 			whitePixel.drawRect(
+		// 				mouseX * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
+		// 				mouseY * 30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			whitePixel.drawRect(
+		// 				8 * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
+		// 				30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			whitePixel.drawRect(
+		// 				(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(whitePixelR * Math.cos(whitePixelTheta)) * 30,
+		// 				(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(whitePixelR * Math.sin(whitePixelTheta)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel1.drawRect(
+		// 				mouseX * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
+		// 				mouseY * 30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel1.drawRect(
+		// 				8 * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
+		// 				30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel1.drawRect(
+		// 				(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(greenPixelR1 * Math.cos(greenPixelTheta1)) * 30,
+		// 				(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(greenPixelR1 * Math.sin(greenPixelTheta1)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel2.drawRect(
+		// 				mouseX * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
+		// 				mouseY * 30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel2.drawRect(
+		// 				8 * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
+		// 				30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			greenPixel2.drawRect(
+		// 				(Math.floor(canvasWidth / 30) - 8) * 30 + Math.floor(greenPixelR2 * Math.cos(greenPixelTheta2)) * 30,
+		// 				(Math.floor(canvasHeight / 30) - 2) * 30 + Math.floor(greenPixelR2 * Math.sin(greenPixelTheta2)) * 30,
+		// 				30,
+		// 				30
+		// 			);
+		//
+		// 			app.stage.addChild(whitePixel);
+		// 			app.stage.addChild(greenPixel1);
+		// 			app.stage.addChild(greenPixel2);
+		//
+		// 			container.push(whitePixel, greenPixel1, greenPixel2);
+		// 		}
+		// 	}, 500);
+		// }
+		//
+		// return () => {
+		// 	canvasRef.current?.removeChild(app.view);
+		// };
 	});
 
 	useEffect(() => {
